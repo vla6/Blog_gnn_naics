@@ -1,8 +1,8 @@
 ###########################################################
 ##
 ## Class definition for imputer to transform 
-## tabular data to a format suitable for GNN.  
-## No
+## tabular data to a format suitable for GNN.
+## Includes mean fill and data scaling
 ##
 ############################################################
 

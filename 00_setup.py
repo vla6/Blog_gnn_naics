@@ -12,7 +12,7 @@
 input_path = '../kaggle_input/SBAnational.csv'
 
 # Directory for temporary or intermediate files
-temp_path = '../data/2023_10_07'
+temp_path = '../data/2023_12_15'
 
 
 ###########################################################
