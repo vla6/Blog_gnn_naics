@@ -24,6 +24,16 @@ temp_path = '../data/2023_12_15'
 ###########################################################
 
 #
+# GNN batch and sample sizes
+#
+
+gnn_batch_size = 20
+gnn_num_samples = [10, 20]
+gnn_layer_sizes = [8, 8]
+gnn_learning_rate = 0.0001
+gnn_dropout = 0.5
+
+#
 # Features to include in models
 # Use a limited list to reduce runtime
 # 

@@ -46,6 +46,7 @@ def graph_labels(label_data, G, business_node_type = 'LoanNr_ChkDgt'):
         G:  Stellargraph object containing business nodes.  
         business_node_type:  Node type for businesses in the Stellargraph
       Value: label_data values for businesses in the graph.  """
+    
     selected_bus = pd.Series(G.nodes(node_type=business_node_type)) \
         .rename(business_node_type)
     
