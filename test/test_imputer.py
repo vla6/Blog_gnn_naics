@@ -2,7 +2,7 @@
 ##
 ## Class definition for imputer to transform 
 ## tabular data to a format suitable for GNN.
-## Includes mean fill and data scaling
+## TEST VERSION
 ##
 ############################################################
 
@@ -10,9 +10,10 @@ import pandas as pd
 import numpy as np
 
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import MinMaxScaler, QuantileTransformer
+import sklearn
+from sklearn.preprocessing import MinMaxScaler, QuantileTransformer, StandardScaler
 
-class GNNImputer():
+class TestImputer():
     """ Class that contains several sklearn imputers to convert 
     tabular small business administration data to a format that
     is suitable for the GNN.  Specifically, missing values are
@@ -129,6 +130,34 @@ class GNNImputer():
             self.minmax_scaler.fit(data_fill[self.features_minmax_scale])
             return None
         
+    def standard_scaler_create_fit(self, data, transform=True):
+        """ Create and fit the std imputer.  Optionally also transform the
+        input data as it will be used for scaling"""
+        self.std_imputer = StandardScaler()  
+        self.std_imputer_features = ['NoEmp', 'CreateJob', 'DisbursementGross']
+        
+        if transform:
+            data_scale = self.std_imputer.fit_transform(data[self.std_imputer_features])
+            data_scale_df = pd.DataFrame(data_scale, columns= self.std_imputer.get_feature_names_out(),
+                           index = data.index)
+            #print([c for c in data.columns if not c in self.std_imputer_features])
+            
+            
+            data_oth = data[[c for c in data.columns if not c in self.std_imputer_features]]
+            return pd.concat([data_oth, data_scale_df], axis=1)
+        else:
+            self.std_imputer.fit(data[self.std_imputer_features])
+            return None
+        
+    def standard_scaler_transform(self, data,):
+        """ Standard transform"""
+ 
+        data_scale = self.std_imputer.fit_transform(data[self.std_imputer_features])
+        data_scale_df = pd.DataFrame(data_scale, columns= self.std_imputer.get_feature_names_out(),
+                                     index = data.index)
+        return pd.concat([data[[c for c in data.columns if c not in  self.std_imputer_features]],
+                              data_scale_df], axis=1)
+
     def minmax_scaler_transform(self, data):
         """Quantile scale data, using a fitted quantile scaler"""
         scaled_data= self.minmax_scaler.transform(data[self.features_minmax_scale])
@@ -144,20 +173,20 @@ class GNNImputer():
         trans_data1 = self.median_imputer_create_fit(data, transform=True)
         
         # Figure out which features to scale and not scale
-        self.set_scaled_features(data)
+        #self.set_scaled_features(data)
         
         # Crete/fit the quantile scaler
-        trans_data2 = self.quantile_scaler_create_fit(trans_data1, transform = transform)
+        trans_data2 = self.standard_scaler_create_fit(trans_data1, transform = transform)
         if not transform:
             trans_data2 = trans_data1
         
         # Create / fit the minmax scaler
-        trans_data3 = self.minmax_scaler_create_fit(trans_data2, transform = transform)
+        #trans_data3 = self.minmax_scaler_create_fit(trans_data2, transform = transform)
         
         # Save the features after transform
-        self.features_out = list(trans_data3.columns)
+        self.features_out = list(trans_data2.columns)
         
-        return trans_data3
+        return trans_data2
 
         
     def fit(self, data):
@@ -168,8 +197,7 @@ class GNNImputer():
         """Transform dataset containing features, which will have null
         values median filled, and scaled. """
         data_1 = self.median_imputer_transform(data)
-        data_2 = self.quantile_scaler_transform(data_1)
-        return self.minmax_scaler_transform(data_2)
+        return self.standard_scaler_transform(data_1)
     
     def __init__(self, features = None, 
                  num_levels_scale = 5, num_levels_scale_sample = 100000,

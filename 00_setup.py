@@ -27,11 +27,21 @@ temp_path = '../data/2023_12_15'
 # GNN batch and sample sizes
 #
 
-gnn_batch_size = 20
-gnn_num_samples = [10, 20]
-gnn_layer_sizes = [8, 8]
-gnn_learning_rate = 0.0001
-gnn_dropout = 0.5
+gnn_batch_size = 32
+gnn_num_samples = [1, 200]
+gnn_layer_sizes = [128, 512]
+gnn_learning_rate = 0.005
+gnn_dropout = 0.7
+
+#
+# GNN sampling of Business to NAICS sector edges.  Use the
+# following to turn on sampling and how many edges of this
+# type to create per business node.  Sampling will make
+# StellarGraph creation faster and graphs use less memory.
+#
+
+naics_sector_sample = True
+naics_sector_sample_n = 20
 
 #
 # Features to include in models
