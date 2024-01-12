@@ -12,7 +12,7 @@
 input_path = '../kaggle_input/SBAnational.csv'
 
 # Directory for temporary or intermediate files
-temp_path = '../data/2023_12_15'
+temp_path = '../data/2024_01_06'
 
 
 ###########################################################
@@ -24,7 +24,21 @@ temp_path = '../data/2023_12_15'
 ###########################################################
 
 #
-# GNN batch and sample sizes
+# Traditional NN parameters
+#
+
+nn_layer_sizes = [128, 64]
+nn_dropout = 0.5
+nn_batch_size = 32
+nn_epochs = 20
+nn_learning_rate = 0.0005
+
+# Optimizer - you may want to change this based on your hardware
+import tensorflow as tf
+nn_optimizer = tf.keras.optimizers.legacy.Adam
+
+#
+# GNN parameters
 #
 
 gnn_batch_size = 32
@@ -32,6 +46,9 @@ gnn_num_samples = [1, 200]
 gnn_layer_sizes = [128, 512]
 gnn_learning_rate = 0.005
 gnn_dropout = 0.7
+
+# Optimizer - you may want to change this based on your hardware
+gnn_optimizer = tf.keras.optimizers.legacy.Adam
 
 #
 # GNN sampling of Business to NAICS sector edges.  Use the
@@ -42,6 +59,7 @@ gnn_dropout = 0.7
 
 naics_sector_sample = True
 naics_sector_sample_n = 20
+
 
 #
 # Features to include in models
