@@ -32,6 +32,7 @@ nn_dropout = 0.5
 nn_batch_size = 32
 nn_epochs = 20
 nn_learning_rate = 0.0005
+nn_naics_embed_size = 16
 
 # Optimizer - you may want to change this based on your hardware
 import tensorflow as tf
@@ -44,7 +45,7 @@ nn_optimizer = tf.keras.optimizers.legacy.Adam
 gnn_batch_size = 32
 gnn_num_samples = [1, 200]
 gnn_layer_sizes = [128, 512]
-gnn_learning_rate = 0.005
+gnn_learning_rate = 0.001
 gnn_dropout = 0.7
 
 # Optimizer - you may want to change this based on your hardware
