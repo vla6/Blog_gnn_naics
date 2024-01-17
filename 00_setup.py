@@ -42,6 +42,11 @@ nn_optimizer = tf.keras.optimizers.legacy.Adam
 # GNN parameters
 #
 
+# Sampling during graph creation (should exceed 
+# sampling at train / prediction time)
+
+gnn_graph_sample_n = 100
+
 gnn_batch_size = 32
 gnn_num_samples = [1, 200]
 gnn_layer_sizes = [128, 512]
