@@ -44,27 +44,19 @@ nn_optimizer = tf.keras.optimizers.legacy.Adam
 
 # Sampling during graph creation (should exceed 
 # sampling at train / prediction time)
+gnn_graph_sample_n = 50
 
-gnn_graph_sample_n = 100
-
+# Training parameters
 gnn_batch_size = 32
-gnn_num_samples = [1, 200]
-gnn_layer_sizes = [128, 512]
+gnn_num_samples = [10, 10]
+gnn_layer_sizes = [64, 64]
 gnn_learning_rate = 0.001
-gnn_dropout = 0.7
+gnn_dropout = 0.5
+gnn_epochs = 20
+gnn_activations = ['tanh', 'tanh']
 
 # Optimizer - you may want to change this based on your hardware
 gnn_optimizer = tf.keras.optimizers.legacy.Adam
-
-#
-# GNN sampling of Business to NAICS sector edges.  Use the
-# following to turn on sampling and how many edges of this
-# type to create per business node.  Sampling will make
-# StellarGraph creation faster and graphs use less memory.
-#
-
-naics_sector_sample = True
-naics_sector_sample_n = 20
 
 
 #
