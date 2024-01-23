@@ -48,8 +48,8 @@ gnn_graph_sample_n = 50
 
 # Training parameters
 gnn_batch_size = 32
-gnn_num_samples = [10, 10]
-gnn_layer_sizes = [64, 64]
+gnn_num_samples = [20, 10]
+gnn_layer_sizes = [128, 64]
 gnn_learning_rate = 0.001
 gnn_dropout = 0.5
 gnn_epochs = 20
