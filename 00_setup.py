@@ -24,6 +24,12 @@ temp_path = '../data/2024_01_06'
 ###########################################################
 
 #
+# XGBoost parameters
+#
+
+xgb_n_estimators = 30
+
+#
 # Traditional NN parameters
 #
 
@@ -57,6 +63,17 @@ gnn_activations = ['tanh', 'tanh']
 
 # Optimizer - you may want to change this based on your hardware
 gnn_optimizer = tf.keras.optimizers.legacy.Adam
+
+# Unsupervised GNN - edge sampling
+gnn_unsup_sample = True
+gnn_unsup_sample_n = 50
+
+gnn_unsup_num_samples = [100]
+gnn_unsup_layer_sizes = [16]
+gnn_unsup_dropout = 0.2
+gnn_unsup_activations = ['tanh']
+gnn_unsup_epochs = 100
+gnn_unsup_learning_rate = 0.01
 
 
 #

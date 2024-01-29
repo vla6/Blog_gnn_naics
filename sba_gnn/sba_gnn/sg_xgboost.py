@@ -15,7 +15,7 @@ from sklearn.model_selection import RandomizedSearchCV
 # Hyperparameter tuning
 #
 
-hyperparam_serarch = {'max_depth': [5, 6, 8],
+hyperparam_serarch = {'max_depth': [6, 8, 19],
                       'min_child_weight': [1, 10, 50],
                       'gamma': [0, 0.5, 1, 2],
                       'subsample': [0.5, 0.8, 1.0],
@@ -26,7 +26,7 @@ hyperparam_serarch = {'max_depth': [5, 6, 8],
 
 
 def hyperparameter_tune(X, y, 
-                        n_estimators = 20, 
+                        n_estimators = 30, 
                         n_iter = 25,
                         space = hyperparam_serarch,
                         random_state = None,

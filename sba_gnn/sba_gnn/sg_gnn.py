@@ -9,30 +9,37 @@ import pandas as pd
 import numpy as np
 
 #
-# Data processing
+# Data processing (unsupervised model)s
 #
 
+def get_naics_index(naics_seq):
+    return 'n_' + naics_seq
+
 def limit_data(edges_list, features_business, features_naics,
-               dsets_list = ['train'],):
+               dsets_list = ['train']):
     """Limit cases input to GNN.  Takes in data for all cases
     and filters nodes and edges to the data sets (train, test, validation)
     specified.  Any combination of data sets can be outptut"""
     
-    # Limit edges
-    edges_lim = edges_list[edges_list['dset'].isin(dsets_list)] \
-        .drop(columns='dset') \
-        .drop_duplicates()
-               
     # Business features limit 
     features_business_lim = features_business[features_business['dset'].isin(dsets_list)] \
         .drop(columns='dset') 
     
-    # Get NAICS nodes associated with the dset businesses
-    naics_ind = edges_lim[['target']].drop_duplicates()
+    # Get NAICS associated with the businesses in this dataset 
+    included_naics = features_business_lim['NAICS_orig'].drop_duplicates()
+    naics_ind = get_naics_index(included_naics).rename('target')
+    
+    # Limit edges
+    edges_lim = edges_list[edges_list['dset'].isin(dsets_list)] \
+        .drop(columns='dset') \
+        .drop_duplicates() \
+        .merge(naics_ind, on='target')
     
     # Limit NAICS
-    features_naics_lim = features_naics.merge(naics_ind.set_index('target'), 
+    features_naics_lim = features_naics.merge(naics_ind.to_frame().set_index('target'), 
                                               left_index=True, right_index=True)
+    
+    # Only include NAICS in the dataset
 
     return (edges_lim, features_business_lim, features_naics_lim)
 
