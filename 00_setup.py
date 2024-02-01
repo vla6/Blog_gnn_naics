@@ -48,25 +48,26 @@ nn_optimizer = tf.keras.optimizers.legacy.Adam
 # GNN parameters
 #
 
-# Sampling during graph creation (should exceed 
-# sampling at train / prediction time)
-gnn_graph_sample_n = 50
-
 # Training parameters
-gnn_batch_size = 32
-gnn_num_samples = [20, 10]
-gnn_layer_sizes = [128, 64]
-gnn_learning_rate = 0.001
+gnn_batch_size = 64
+gnn_learning_rate = 0.002
 gnn_dropout = 0.5
 gnn_epochs = 20
+
+gnn_num_samples = [10, 20]
+gnn_layer_sizes = [64, 64]
 gnn_activations = ['tanh', 'tanh']
+
+gnn_num_samples_sec = [1, 10, 5, 3]
+gnn_layer_sizes_sec = [64, 32, 16, 16]
+gnn_activations_sec = ['tanh', 'tanh', 'tanh', 'tanh']
 
 # Optimizer - you may want to change this based on your hardware
 gnn_optimizer = tf.keras.optimizers.legacy.Adam
 
-# Unsupervised GNN - edge sampling
-gnn_unsup_sample = True
-gnn_unsup_sample_n = 50
+# Unsupervised GNN - edge sampling in graph creation
+gnn_unsup_sample = False
+gnn_unsup_sample_n = 500
 
 gnn_unsup_num_samples = [100]
 gnn_unsup_layer_sizes = [16]

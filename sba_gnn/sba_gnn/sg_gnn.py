@@ -15,8 +15,13 @@ import numpy as np
 def get_naics_index(naics_seq):
     return 'n_' + naics_seq
 
+def get_naics_sector_index(naics_sec):
+    return 'ns_' + naics_sec.astype('str')
+
+
 def limit_data(edges_list, features_business, features_naics,
-               dsets_list = ['train']):
+               dsets_list = ['train'],
+              edge_types_retain = ['naics_sector']):
     """Limit cases input to GNN.  Takes in data for all cases
     and filters nodes and edges to the data sets (train, test, validation)
     specified.  Any combination of data sets can be outptut"""
@@ -30,7 +35,8 @@ def limit_data(edges_list, features_business, features_naics,
     naics_ind = get_naics_index(included_naics).rename('target')
     
     # Limit edges
-    edges_lim = edges_list[edges_list['dset'].isin(dsets_list)] \
+    edges_lim = edges_list[edges_list['dset'].isin(dsets_list) |
+                          edges_list['type'].isin(edge_types_retain)] \
         .drop(columns='dset') \
         .drop_duplicates() \
         .merge(naics_ind, on='target')
@@ -38,8 +44,6 @@ def limit_data(edges_list, features_business, features_naics,
     # Limit NAICS
     features_naics_lim = features_naics.merge(naics_ind.to_frame().set_index('target'), 
                                               left_index=True, right_index=True)
-    
-    # Only include NAICS in the dataset
 
     return (edges_lim, features_business_lim, features_naics_lim)
 
