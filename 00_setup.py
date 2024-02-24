@@ -12,7 +12,7 @@
 input_path = '../kaggle_input/SBAnational.csv'
 
 # Directory for temporary or intermediate files
-temp_path = '../data/2024_01_06'
+temp_path = '../data/2024_02_23'
 
 
 ###########################################################
@@ -38,7 +38,7 @@ nn_dropout = 0.5
 nn_batch_size = 32
 nn_epochs = 20
 nn_learning_rate = 0.0005
-nn_naics_embed_size = 16
+nn_naics_embed_size = 8
 
 # Optimizer - you may want to change this based on your hardware
 import tensorflow as tf
@@ -49,7 +49,7 @@ nn_optimizer = tf.keras.optimizers.legacy.Adam
 #
 
 # Training parameters
-gnn_batch_size = 64
+gnn_batch_size = 32
 gnn_learning_rate = 0.002
 gnn_dropout = 0.5
 gnn_epochs = 20
@@ -58,9 +58,6 @@ gnn_num_samples = [10, 20]
 gnn_layer_sizes = [64, 64]
 gnn_activations = ['tanh', 'tanh']
 
-gnn_num_samples_sec = [1, 10, 5, 3]
-gnn_layer_sizes_sec = [64, 32, 16, 16]
-gnn_activations_sec = ['tanh', 'tanh', 'tanh', 'tanh']
 
 # Optimizer - you may want to change this based on your hardware
 gnn_optimizer = tf.keras.optimizers.legacy.Adam
@@ -70,7 +67,7 @@ gnn_unsup_sample = False
 gnn_unsup_sample_n = 500
 
 gnn_unsup_num_samples = [100]
-gnn_unsup_layer_sizes = [16]
+gnn_unsup_layer_sizes = [8]
 gnn_unsup_dropout = 0.2
 gnn_unsup_activations = ['tanh']
 gnn_unsup_epochs = 100

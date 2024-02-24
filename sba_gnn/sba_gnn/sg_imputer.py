@@ -48,7 +48,7 @@ class GNNImputer():
                                             strategy='median',
                                             add_indicator=True)  
         if transform:
-            data = data[self.features_in + [self.naics_feature]]
+            data = data[self.features_in + self.naics_features]
             data_trans = \
                 self.median_imputer_trans_to_pandas(self.median_imputer \
                                                .fit_transform(data[self.features_in]),
@@ -63,7 +63,7 @@ class GNNImputer():
     def median_imputer_transform(self, data):
         """ Transform data using the median imputer, returning
         Pandas data"""
-        data = data[self.features_in + [self.naics_feature]]
+        data = data[self.features_in + self.naics_features]
         data_trans = self.median_imputer_trans_to_pandas(self.median_imputer \
                                                    .transform(data[self.median_imputer.feature_names_in_]),
                                                   index = data.index)
@@ -148,7 +148,7 @@ class GNNImputer():
         
     def naics_encoder_create_fit(self, data, transform = True):
         """Label encode the NAICS feature. Add one to OrdinalEncoder to allow missing values """
-        if self.naics_feature is None:
+        if self.naics_features is None:
             return data
         
         # Create and fit the encoder
@@ -157,16 +157,16 @@ class GNNImputer():
                                             unknown_value = -1)
         
         if transform:
-            trans_data = self.naics_encoder.fit_transform(data[[self.naics_feature]]) + 1
+            trans_data = self.naics_encoder.fit_transform(data[self.naics_features]) + 1 
             return self.scaler_trans_append(data, trans_data,
                                            scaler=self.naics_encoder)
         else:
-            self.naics_encoder.fit(data[[self.naics_feature]])
+            self.naics_encoder.fit(data[self.naics_features])
             return None
                                             
     def naics_encoder_transform(self, data):
         """Transform NAICS data.  Add one to OrdinalEncoder to allow missing values """
-        scaled_data= self.naics_encoder.transform(data[[self.naics_feature]]) + 1
+        scaled_data= self.naics_encoder.transform(data[self.naics_features]) + 1
         return self.scaler_trans_append(data, scaled_data, scaler=self.naics_encoder)
     
     def get_naics_encoder_levels(self):
@@ -181,7 +181,7 @@ class GNNImputer():
         
         if self.features_in is None:
             self.features_in = [c for c in data.select_dtypes('number').columns \
-                                if c != self.naics_feature]
+                                if c != self.naics_features]
         
         # Create/fit median imputer for missing data, transform training data
         trans_data1 = self.median_imputer_create_fit(data, transform=transform)
@@ -222,7 +222,7 @@ class GNNImputer():
     def __init__(self, features = None, 
                  num_levels_scale = 5, num_levels_scale_sample = 100000,
                 quantile_levels = 1000,
-                naics_feature = 'NAICS'):
+                naics_features = 'NAICS'):
         """ Instantiates the custom scaler.  
           Inputs:
             features:  List of input features affected by the transformations.
@@ -237,6 +237,7 @@ class GNNImputer():
               of cases is used to determine the number of levels per feature
               to determine whether the feature should be quantile or minmax scaled.
             quantile_levels: Number of quantiles to use for the quantile scaling
+            naics_features: List of features (or single feature) for NAICS transform
               
         """
         self.features_in = features # Predictors, except for NAICS
@@ -244,7 +245,10 @@ class GNNImputer():
         self.num_levels_scale_sample = num_levels_scale_sample
         self.quantile_levels = quantile_levels
         
-        self.naics_feature = naics_feature
+        if isinstance(naics_features, list) or naics_features is None:
+            self.naics_features = naics_features
+        else:
+            self.naics_features = [naics_features]
         
         # During fit, I select some features for quantile scaling, others for
         # simple minmax scaling, based on level count, i.e. which are likely to
