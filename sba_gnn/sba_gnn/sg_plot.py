@@ -108,6 +108,7 @@ def naics_variance_plot(data_agg, naics_feat = 'NAICS',
                         xerr = 'target_sd',
                         x_sector = 'target_cat',
                         x_sector_err = 'target_cat_sd',
+                        xlabel = 'target rate',
                         num_sectors = None,
                         naics_int = False,
                         fig_width = 7, fig_height_sec = 1):
@@ -161,7 +162,7 @@ def naics_variance_plot(data_agg, naics_feat = 'NAICS',
         if i >= num_sectors:
             break   
 
-    ax[i-1].set_xlabel('target rate')
+    ax[i-1].set_xlabel(xlabel)
     ax[int(np.floor(num_sectors/2))].set_ylabel('NAICS')
     fig.tight_layout()
     plt.subplots_adjust(hspace=0.03)
