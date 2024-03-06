@@ -13,6 +13,8 @@ import textwrap
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, \
     average_precision_score, roc_auc_score
 
+from sklearn.preprocessing import TargetEncoder
+
 #
 # Plot setups, default parameters
 #
@@ -235,3 +237,28 @@ def dset_metrics(actual, predict_bin = None, predict_prob = None,
     """
     return pd.Series([do_metric(m, actual, predict_bin, predict_prob) \
                       for m in metrics_list], index=[m.__name__ for m in metrics_list]) 
+
+#
+# Mean encoding within groups
+#
+
+# Per sector function
+def mean_enc_grp(data, feature = 'NAICS', feature_out = 'menc_grp_NAICS', random_state=3453,
+                cv = 5):
+    
+    naics_grp_encoder = TargetEncoder(target_type='binary', random_state=random_state, cv = cv)
+    naics_grp_encoder.set_output(transform='pandas')
+    
+    if len(data[data['dset'] == 'train']) < cv:
+        return pd.DataFrame({feature_out:[np.nan]*len(data)}, index=data.index)
+    
+    # Some categories may be too low volume to encode; return NAs then
+    try:
+        train_out = naics_grp_encoder.fit_transform(data[data['dset'] == 'train'][[feature]], 
+                      data[data['dset'] == 'train']['target'])
+        other_out= naics_grp_encoder.transform(data[data['dset'] != 'train'][[feature]])
+        out_data = pd.concat([train_out, other_out], axis=0).sort_index()
+        out_data.columns = [feature_out]
+    except:
+        out_data = pd.DataFrame({feature_out:[np.nan]*len(data)}, index=data.index)
+    return out_data
