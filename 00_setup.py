@@ -12,7 +12,7 @@
 input_path = '../kaggle_input/SBAnational.csv'
 
 # Directory for temporary or intermediate files
-temp_path = '../data/2024_03_02'
+temp_path = '../data/2024_03_15'
 
 
 ###########################################################
@@ -45,18 +45,8 @@ import tensorflow as tf
 nn_optimizer = tf.keras.optimizers.legacy.Adam
 
 #
-# GNN parameters
+# DGI parameters
 #
-
-# Training parameters
-gnn_batch_size = 32
-gnn_learning_rate = 0.002
-gnn_dropout = 0.5
-gnn_epochs = 20
-
-gnn_num_samples = [10, 20]
-gnn_layer_sizes = [64, 64]
-gnn_activations = ['tanh', 'tanh']
 
 
 # Optimizer - you may want to change this based on your hardware
@@ -65,6 +55,7 @@ gnn_optimizer = tf.keras.optimizers.legacy.Adam
 # Unsupervised GNN - edge sampling in graph creation
 gnn_unsup_sample = False
 gnn_unsup_sample_n = 500
+gnn_batch_size = 32
 
 gnn_unsup_num_samples = [100]
 gnn_unsup_layer_sizes = [8]

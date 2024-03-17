@@ -74,6 +74,16 @@ def plot_basic_bar(data, y,
 # NAICS variation plot
 #
 
+def wald_interval_sd(r, c):
+    """Calculate the Wald interval for the target rate in a group
+      Inputs:
+        r: Mean response (rate)
+        c:  Number of observations
+    """
+    #print(c)
+    #print(r)
+    return np.sqrt(r * (1-r)) / np.sqrt(c)
+
 def naics_variance_data(data, naics_feat='NAICS',
                         naics_sector_feat = 'NAICS_sector',
                         naics_sector_desc_feat = 'NAICS_sector_desc',
@@ -83,7 +93,7 @@ def naics_variance_data(data, naics_feat='NAICS',
     naics_sum_1 = data \
         .groupby(naics_feat) \
         .agg({target_col:'mean', id_col:'count', naics_sector_feat:'first'}) \
-        .rename(columns={id_col:'count', target_col:'target'}) \
+        .rename(columns={id_col:'count_naics', target_col:'target_naics'}) \
         .reset_index()
     
     naics_sum_2 = data\
@@ -94,22 +104,23 @@ def naics_variance_data(data, naics_feat='NAICS',
         .sort_values('count_cat', ascending=False)
     
     naics_sum = naics_sum_1.merge(naics_sum_2, how='inner', on=naics_sector_feat) \
-        .sort_values(['count_cat', 'count'], ascending=[False, False])
-    
-    naics_sum['target_sd'] = np.sqrt(naics_sum['count']* naics_sum['target']) / naics_sum['count']
-    naics_sum['target_cat_sd'] = np.sqrt(naics_sum['count_cat'] * naics_sum['target_cat']) / \
-        naics_sum['count_cat']
-    
+        .sort_values(['count_cat', 'count_naics'], ascending=[False, False])
+ 
+    naics_sum['target_naics_sd'] = naics_sum.apply(lambda x: wald_interval_sd(x.target_naics, x.count_naics),
+                                            axis=1)
+    naics_sum['target_cat_sd'] = naics_sum.apply(lambda x: wald_interval_sd(x.target_cat,x.count_cat),
+                                                axis=1)
     return naics_sum
 
 def naics_variance_plot(data_agg, naics_feat = 'NAICS',
                         naics_sector_feat = 'NAICS_sector',
                         naics_sector_desc_feat = 'NAICS_sector_desc',
                         naics_sector_sort = True,
-                        x='target',
-                        xerr = 'target_sd',
+                        x='target_naics',
+                        xerr = 'target_naics_sd',
                         x_sector = 'target_cat',
                         x_sector_err = 'target_cat_sd',
+                        x_sector_count = 'count_cat',
                         xlabel = 'target rate',
                         num_sectors = None,
                         naics_int = False,
@@ -117,7 +128,7 @@ def naics_variance_plot(data_agg, naics_feat = 'NAICS',
     
     data_agg = data_agg.copy()
     if naics_sector_sort:
-        data_agg.sort_values(['count_cat', naics_feat], ascending=[False, True], inplace=True)
+        data_agg.sort_values([x_sector_count, naics_feat], ascending=[False, True], inplace=True)
     if naics_int:
         data_agg[naics_feat] = data_agg[naics_feat].astype('str').astype('int')    
     
@@ -242,13 +253,18 @@ def dset_metrics(actual, predict_bin = None, predict_prob = None,
 # Mean encoding within groups
 #
 
-# Per sector function
+# Per group function
 def mean_enc_grp(data, feature = 'NAICS', feature_out = 'menc_grp_NAICS', random_state=3453,
                 cv = 5):
+    """ Mean encodes within groups.  Expects input grouped data, with 'dset' feature = 'train
+    for the training slice.  For one group, an encoder is created and then fit to the training
+    data.  All rows are transformed.  Groups with too low volume in the test and/or train data
+    are set to NA"""
     
     naics_grp_encoder = TargetEncoder(target_type='binary', random_state=random_state, cv = cv)
     naics_grp_encoder.set_output(transform='pandas')
     
+    # We need a baseline number of rows to encode
     if len(data[data['dset'] == 'train']) < cv:
         return pd.DataFrame({feature_out:[np.nan]*len(data)}, index=data.index)
     

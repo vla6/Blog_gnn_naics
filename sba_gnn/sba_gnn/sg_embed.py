@@ -53,7 +53,8 @@ def emb_plot(tsne_df, color_var = 'sector_num', alpha=0.7,
     )
     ax.set_xlabel("$X_1$")
     ax.set_ylabel("$X_2$")
-    ax.set_aspect(aspect)
+
+
     if title_str is not None:
         plt.title(f'{title_str}\nby {color_var}')
     else:
@@ -64,10 +65,13 @@ def emb_plot(tsne_df, color_var = 'sector_num', alpha=0.7,
     else:
         norm = colors.LogNorm(tsne_df[color_var].min() + 0.002, tsne_df[color_var].max())
     
+    ax.set_aspect(aspect)
+    
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
 
     fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax)
+    
     plt.tight_layout()
     plt.subplots_adjust(top=0.85)
     
@@ -151,6 +155,8 @@ def plot_silhouette(silhouette_values, cluster_labels, label_x_pos = -0.05,
     ax.axvline(x=silhouette_avg, color="red", linestyle="--")
 
     ax.set_yticks([])  # Clear the yaxis labels / ticks
+    
+
     #ax.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])
     
     return ax
@@ -215,6 +221,8 @@ def plot_clusters(tsne_df, labels_ser, center_label = False,
         fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax)
         plt.tight_layout()
         plt.subplots_adjust(top=0.85)
+        
+    ax.set_aspect(aspect)
     
     return ax 
                    
