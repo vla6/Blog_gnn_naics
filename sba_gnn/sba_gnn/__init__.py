@@ -1,1 +1,1 @@
-__all__ = ['sg_plot', 'sg_gnn', 'sg_imputer', 'sg_xgboost', 'sg_embed']
+__all__ = ['sg_plot', 'sg_gnn', 'sg_imputer', 'sg_xgboost', 'sg_embed', 'sg_blender']

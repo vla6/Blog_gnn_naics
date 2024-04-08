@@ -251,6 +251,7 @@ def dset_metrics(actual, predict_bin = None, predict_prob = None,
 
 #
 # Mean encoding within groups
+# Using Scikit Learn
 #
 
 # Per group function
@@ -278,3 +279,36 @@ def mean_enc_grp(data, feature = 'NAICS', feature_out = 'menc_grp_NAICS', random
     except:
         out_data = pd.DataFrame({feature_out:[np.nan]*len(data)}, index=data.index)
     return out_data
+
+#
+# Summary level stats
+#
+
+def naics_grp_stats(data, group_col = 'NAICS_sector'):
+    """Count loans and NAICS codes within groups"""
+    naics_agg = data.groupby(group_col)['target'] \
+        .agg(['count', 'mean']) \
+        .set_axis(['loan_count', 'target'], axis=1) \
+        .reset_index()
+
+    naics_agg['low_vol'] = np.where(naics_agg['loan_count'] <=50, 1, 0)
+    grp_agg = naics_agg \
+        [['loan_count', 'target', 'low_vol']] \
+        .agg(['count', 'mean', 'median', 'min', 'max', 'sum'])
+    
+    naics_code_agg = data.drop_duplicates('NAICS') \
+        .groupby(group_col)['target'] \
+        .agg(['count']) \
+        .set_axis(['naics_count'], axis=1) \
+        .reset_index()
+    
+    naics_code_agg['single_naics'] =  np.where(naics_code_agg['naics_count'] == 1, 1, 0)
+    
+    naics_code_agg_grp = naics_code_agg \
+        [['naics_count', 'single_naics']] \
+        .agg(['count', 'mean', 'median', 'min', 'max', 'sum']) 
+    
+    grp_agg = pd.concat([grp_agg, naics_code_agg_grp], axis=1)
+    grp_agg = grp_agg.transpose() \
+        .rename(columns={'count':'count_grp'})
+    return grp_agg
