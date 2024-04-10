@@ -102,12 +102,13 @@ def get_clusters_silhouettes(embed_df, n_clusters, random_state = 10):
 # Plot silhouettes
 # See https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_silhouette_analysis.html#sphx-glr-auto-examples-cluster-plot-kmeans-silhouette-analysis-py
 def plot_silhouette(silhouette_values, cluster_labels, label_x_pos = -0.05,
-                   cmap = cm.nipy_spectral, blank_factor = 15):
+                   cmap = cm.nipy_spectral, blank_factor = 15, ax=None):
     
     n_clusters = len(np.unique(cluster_labels))
     silhouette_avg = np.mean(silhouette_values)
     
-    fig, ax = plt.subplots()
+    if ax is None:
+        fig, ax = plt.subplots()
     
     xmin = np.min([-0.1, np.min(silhouette_values)])
     xmax = np.max([0.2, np.max(silhouette_values)])
@@ -167,7 +168,8 @@ def plot_clusters(tsne_df, labels_ser, center_label = False,
                   title_str = None,
                   aspect = 'equal',
                   cmap = cm.nipy_spectral,
-                  colorbar = False):
+                  colorbar = False,
+                  ax = None):
     
     n_clusters = labels_ser.drop_duplicates().count()
     
@@ -181,7 +183,9 @@ def plot_clusters(tsne_df, labels_ser, center_label = False,
                                         .to_frame()).iloc[:,0]
     colors_n = cmap(label_float)
 
-    fig, ax = plt.subplots(figsize=figsize)
+    if ax is None:
+        fig, ax = plt.subplots(figsize=figsize)
+    
     s = ax.scatter(
         tsne_df[0],
         tsne_df[1],
@@ -218,7 +222,7 @@ def plot_clusters(tsne_df, labels_ser, center_label = False,
         
         norm = colors.Normalize(labels_ser.min(), labels_ser.max())
 
-        fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax)
+        plt.gcf().colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax)
         plt.tight_layout()
         plt.subplots_adjust(top=0.85)
         
