@@ -1,7 +1,7 @@
 # Blog_gnn_naics
 A project exploring categorical feature encodings/embeddings, especially with graph neural networks techniques.  
 
-## Towards Data Science "Experts, Embeddings, Encodings: Alternative Groupings for High-Cardinality Categorical Features"
+## Towards Data Science "Exploring Hierarchical Blending in Target Encoding"
 
 Table data is in the top level in the "tables.xlsx" document.  
 
