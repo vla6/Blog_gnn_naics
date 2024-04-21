@@ -1,0 +1,14 @@
+Do F loops to start for tc, tt
+
+Maybe add similar chart for hierarchical vs non in script 14
+
+A05 - compare level stats 
+A06 - different pairs
+
+Then do DGI ones - maybe just loops
+
+then the target-thresh ones
+
+Try not to truncate count feature in hierarchy
+
+Neural networks with threshold - SAVE FOR NEXT POST

@@ -28,7 +28,7 @@ class HierarchicalEncoder():
         return 1 / (1 + np.exp((k-n)/f))
 
     
-    def get_stats_list_item(self, data):
+    def stats_list_item(self, data):
         """Aggregate to get means for one category. 
           Inputs:
             data:  Pandas dataframe where the first column is the
@@ -53,6 +53,8 @@ class HierarchicalEncoder():
             .apply(lambda x: HierarchicalEncoder.blend_lambda(x, self.lambda_k, self.lambda_f))
         return data_agg
     
+    def get_stats_list(self):
+        return self.stats_list
     
     def set_stats_list(self, X, y):
         """Sets a list of means, counts, and blend fractions for each level of the 
@@ -65,7 +67,7 @@ class HierarchicalEncoder():
         map_master = X.drop_duplicates(major_col)
         
         # Get category values
-        self.stats_list = [self.get_stats_list_item(pd.concat([X.iloc[:, i], y], axis=1)) \
+        self.stats_list = [self.stats_list_item(pd.concat([X.iloc[:, i], y], axis=1)) \
                     for i in range(X.shape[1])]
         
         self.overall_mean = y.mean()
@@ -146,5 +148,14 @@ class HierarchicalEncoder():
             lambda_k: Blending midpoint
             lambda_f:  Blending width
         """
-        self.lambda_k = lambda_k
-        self.lambda_f = lambda_f
+        if lambda_k is None:
+            self.lambda_k = default_lambda_k
+        else:
+            self.lambda_k = lambda_k
+        if lambda_f is None:
+            self.lambda_f = default_lambda_f
+        else:
+            self.lambda_f = lambda_f
+            
+        print(self.lambda_k)
+        print(self.lambda_f)
