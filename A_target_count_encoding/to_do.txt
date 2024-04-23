@@ -1,14 +1,22 @@
+
+
+3 way threshold plots
+
+Consider randomization (random NA) - regular target encoding, but no overall mean in transform (NA instead at last level or transform only train, validation)
+  Adjust blender code
+
+Try non count threshold in Target+Count
+
+Some SHAP - which hierarchy level is significant for test, holdout
+
+Neural networks with threshold - SAVE FOR NEXT POST
+
+Try randomization? -- SAVE FOR NEXT NEXT   
+
+DONE
+
 Do F loops to start for tc, tt
 
 Maybe add similar chart for hierarchical vs non in script 14
 
 A05 - compare level stats 
-A06 - different pairs
-
-Then do DGI ones - maybe just loops
-
-then the target-thresh ones
-
-Try not to truncate count feature in hierarchy
-
-Neural networks with threshold - SAVE FOR NEXT POST
