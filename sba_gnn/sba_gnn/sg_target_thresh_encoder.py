@@ -67,12 +67,19 @@ class TargetThreshEncoder():
             .drop(columns='feature') \
             .set_index(ind_nm)
         
+        if self.fill_value is not None:
+            enc_df = enc_df.fillna(self.fill_value)
+        
         return enc_df
     
-    def __init__(self, threshold = 100):
+    def __init__(self, threshold = 100, fill_value = None):
         """ Target encoding, but threshold values below a certain point;
-        missing will be NA.
+        missing will be NA (or, optionally another value)
           Attributes:
             threshold: counts below which we set encodings to NA
+            fill_val: Optional value for filling NAs.  This is
+              not recommended for XGBoost.  None means
+              low volume, unknown, or missing are NA
         """
         self.threshold = threshold
+        self.fill_value = fill_value

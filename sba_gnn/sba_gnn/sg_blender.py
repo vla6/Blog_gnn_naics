@@ -156,6 +156,3 @@ class HierarchicalEncoder():
             self.lambda_f = default_lambda_f
         else:
             self.lambda_f = lambda_f
-            
-        print(self.lambda_k)
-        print(self.lambda_f)
