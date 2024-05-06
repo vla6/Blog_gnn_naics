@@ -1,4 +1,29 @@
 
+Shapley - fix DGI plots
+Also make nicer plots for paper
+
+
+Shapley comparison
+scatter - compare models, corr?  Interactions?  Main effects?
+vs k for single feature (no hiearchy), TT only, maybe also TC
+
+
+===
+DGI Shapley
+
+===
+Shapley
+ - remove encoding all NAICS, put in footnote NO
+ - k loop for all hier?  also dgi all hier?
+ - k loop for all-DGI cases?  YES
+ 
+ - NAICS only with Target-Count, Thresh.  Make a table or k loop?
+ 
+ - Train vs Test for all models ?
+ 
+ Question format in writing
+ "What about other model types?"
+ "What about missing values?"
 
 Consider randomization (random NA) - regular target encoding, but no overall mean in transform (NA instead at last level or transform only train, validation)
   Adjust blender code
@@ -18,3 +43,11 @@ Maybe add similar chart for hierarchical vs non in script 14
 A05 - compare level stats 
 
 Try non count threshold in Target+Count
+
+feature_order = ['menc', 'mhier', 'menc_all', 'tc', 'tt']
+num_models = len(feature_order)
+print_dict = {'menc': 'Target encoding (NAICS only)', 
+                'mhier':'Hierarchical Blencing',
+                'menc_all': 'Target encoding (NAICS hierarchy)',
+                'tc':'Target+Count encoding',
+                 'tt':'Target-Thresh encoding'}

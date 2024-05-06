@@ -312,3 +312,57 @@ def naics_grp_stats(data, group_col = 'NAICS_sector'):
     grp_agg = grp_agg.transpose() \
         .rename(columns={'count':'count_grp'})
     return grp_agg
+
+#
+# Curve comparison plot
+#
+
+def curve_compare_hline(plot_dict, hline_val = None,
+                        ax = None,
+                        label_dict = None, 
+                        style_dict = None, color_dict = None, 
+                        title = None,
+                        xfeature = 'c',
+                        yfeature = 'average_precision_score',
+                        xlabel = None,
+                        ylabel='PR-AUC',
+                        titlesize = 16, 
+                        legendsize = 12,
+                        logx = True):
+    """ Function to compare several curves with a horizontal reference line.
+    Pass in a dictionary of curves with matching labels, styles, and colors"""
+    if ax == None:
+        fig, ax = plt.subplots()
+        had_ax = False
+    else:
+        had_ax = True
+    num_keys = len(plot_dict.keys())
+        
+    if label_dict is None:
+        label_dict = {k:k for k in plot_dict.keys()}
+    if style_dict is None:
+        styles = ['o-', 's-', '.-', '4-']*int(np.ceil(num_keys/4))
+        style_dict = {k:styles[i] for i, k in enumerate(plot_dict)}
+    if color_dict is None:
+        colors = ['black', 'blue', 'green', 'red', 'cyan']*int(np.ceil(num_keys/5))
+        color_dict = {k:colors[i] for i, k in enumerate(plot_dict)}
+    
+    # Make all the plots
+    {plot_dict[i].plot(x=xfeature, y=yfeature, logx=logx, ax=ax, 
+                label=label_dict[i], color=color_dict[i],
+                       style=style_dict[i])
+         for i in plot_dict.keys()}
+
+    ax.set_ylabel(ylabel)
+    ax.set_xlabel(xlabel)
+
+    ax.set_title(title, fontsize=titlesize)
+    if hline_val is not None:
+        ax.axhline(y=hline_val, color='darkgray')
+    
+    ax.legend(frameon=True, fontsize=legendsize).get_frame().set_edgecolor('darkgray')
+    
+    if not had_ax:
+        return fig
+    else:
+        return None

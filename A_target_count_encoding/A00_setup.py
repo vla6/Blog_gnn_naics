@@ -34,39 +34,37 @@ xgb_n_estimators = 30
 
 selected_lambda_k = 100
 
-#
-# Traditional NN parameters
-#
-
-nn_layer_sizes = [128, 64]
-nn_dropout = 0.5
-nn_batch_size = 32
-nn_epochs = 20
-nn_learning_rate = 0.0005
-nn_naics_embed_size = 8
-
-# Optimizer - you may want to change this based on your hardware
-import tensorflow as tf
-nn_optimizer = tf.keras.optimizers.legacy.Adam
 
 #
-# DGI parameters
+# Plotting labels and parameters
 #
 
+import pandas as pd
 
-# Optimizer - you may want to change this based on your hardware
-gnn_optimizer = tf.keras.optimizers.legacy.Adam
+# Dictionaries for plotting, also ideal order
+feature_order = ['menc', 'mhier', 'menc_all', 'tc', 'tt']
+model_label_dict = {'menc': 'Target Encoding (NAICS only)',
+                    'mhier': 'Hierarchical Blending',
+                    'menc_all': 'Target Encoding (all)',
+                    'tc': 'Target+Count Encoding',
+                    'tt': 'Target-Thresh Encoding'}
 
-# Unsupervised GNN - edge sampling in graph creation
-gnn_unsup_sample = False
-gnn_unsup_sample_n = 500
-gnn_batch_size = 32
+model_label_colors = {'menc':'darkgray',
+                      'mhier':'darkslateblue',
+                      'menc_all': 'mediumaquamarine',
+                      'tc':'darkorange',
+                      'tt':'violet'}
+model_label_styles = {'menc':'o-',
+                      'mhier':'v-',
+                      'menc_all': 'd-',
+                      'tc':'+-',
+                      'tt':'P-'}
 
-gnn_unsup_num_samples = [100]
-gnn_unsup_layer_sizes = [8]
-gnn_unsup_dropout = 0.2
-gnn_unsup_activations = ['tanh']
-gnn_unsup_epochs = 100
-gnn_unsup_learning_rate = 0.01
+model_label_type = pd.CategoricalDtype(categories = [model_label_dict[k] 
+                                                     for k in feature_order], ordered=True)
 
-
+# Funcion for applying labels
+def label_models(data, feature  = 'model'):
+    ser  = data[feature].apply(lambda x: model_label_dict[x]) \
+        .astype(model_label_type)
+    return ser
