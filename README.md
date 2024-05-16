@@ -1,19 +1,23 @@
 # Blog_gnn_naics
 A project exploring categorical feature encodings/embeddings, especially with graph neural networks techniques.  
 
-## Towards Data Science "Exploring Hierarchical Blending in Target Encoding"
+## Towards Data Science "[Exploring Hierarchical Blending in Target Encoding](https://medium.com/towards-data-science/exploring-hierarchical-blending-in-target-encoding-fea4c59b305b)"
 
 Table data is in the top level in the "tables.xlsx" document.  
 
 Code is at the top level; notebooks would run in order.  Metrics are collected and summarized in 80_perf_summary.ipynb.
 
-## Running Code
+### Running Code
 
 First, download the [SBA Loans Dataset from Kaggle](https://www.kaggle.com/datasets/mirbektoktogaraev/should-this-loan-be-approved-or-denied).
 
 Then, change setup.py
   * Make input_path point to the SBA Loans dataset on your system
   * temp_path should point to a writeable directory on your system
+
+## Towards Data Science "No Label Left Behind: Alternative Encodings for Hierarchical Categoricals"
+
+See the subdirectory A_target_count_encoding
 
 ## Hardware and GPUs
 
