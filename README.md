@@ -15,7 +15,7 @@ Then, change setup.py
   * Make input_path point to the SBA Loans dataset on your system
   * temp_path should point to a writeable directory on your system
 
-## Towards Data Science "No Label Left Behind: Alternative Encodings for Hierarchical Categoricals"
+## Towards Data Science "[No Label Left Behind: Alternative Encodings for Hierarchical Categoricals](https://medium.com/towards-data-science/no-label-left-behind-alternative-encodings-for-hierarchical-categoricals-d1bcf00afc37)"
 
 See the subdirectory A_target_count_encoding
 
